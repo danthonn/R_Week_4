@@ -1,0 +1,93 @@
+---
+title: "R_Week_4_Hmk_Daniel_Thonn"
+output: html_document
+course: R-Bridge CUNY MSDA program
+Reference: http://t-redactyl.io/blog/2016/02/creating-plots-in-r-using-ggplot2-part-7-histograms.html
+---
+
+## Assignment Homework-4: Exploratory Data Analysis
+
+### Dataset: Titanic Data and rate of survival
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#install.packages(c("ggplot2","gcookbook"))
+library(ggplot2)
+library(gcookbook)
+
+data(package="gcookbook")
+data(package="MASS")
+
+vignette(package="ggplot2")
+vignette(package="gcookbook")
+```
+
+
+```{r, echo=TRUE}
+#install.packages("RCurl")
+#install.packages("XML")
+#require(stringr)
+
+#check data path
+#getwd()
+
+#load titanic dataset
+dat = read.csv("titanic.csv", header = TRUE)
+# examine titanic dataset
+dat
+typeof(dat)
+
+#examine header
+head(dat)
+
+#check named elements in dat
+names(dat)
+#Result: there are 6 column names
+
+#check the structure of dat
+str(dat)
+# Result: 32 objects with 6 variables
+
+dat
+str(dat)
+#View(dat)
+# Histogram Charts
+dat_survived_no <- dat[which(dat$Survived == "No"), ]
+dat_survived_no
+dat_survived_yes <- dat[which(dat$Survived == "Yes"), ]
+dat_survived_yes
+# Graph Histogram for Survived = No of counts of incidents
+ggplot(dat_survived_no, aes(dat_survived_no$Freq)) + geom_histogram(binwidth = 10)
+# Graph Histogram for Survived = Yes of counts of incidents
+ggplot(dat_survived_yes, aes(dat_survived_no$Freq)) + geom_histogram(binwidth = 10)
+ggplot(dat, aes(dat$Freq)) + geom_histogram(binwidth = 10 )
+dat$Survived.f <- factor(dat$Survived,labels = c("Yes","No"))
+dat$Sex.f <- factor(dat$Sex,labels = c("Male","Female"))
+ggplot(dat, aes(x=dat$Freq,fill=Survived.f)) + geom_histogram(binwidth = 10 )
+dat_survived_yes$Sex.f <- factor(dat_survived_yes$Sex,labels = c("Male","Female"))
+ggplot(dat, aes(x=dat$Freq,fill=Sex.f)) + geom_histogram(binwidth = 10 )
+
+ggplot(dat_survived_yes, aes(x=dat_survived_yes$Freq,fill=Sex.f)) + geom_histogram(binwidth = 10 )
+
+# Conclusion: There were higher number of females of certain categories that survived, however there were also higher numbers of females in the categories that didn't survive.
+
+# BoxPlot Chart
+#View(dat_survived_yes)
+dat_survived_yes
+ggplot(dat_survived_yes, aes(x=Class, y=Freq)) + geom_boxplot()
+
+#Conclusion: in terms of overall numbers the median incidence of survival was higher among passengers than crew.   
+
+# Scatterplot Chart
+ggplot(dat_survived_yes, aes(x=Freq, y=Class)) + geom_point()
+
+# Conclusion: There were higher incidence of survival crew, then 1st class, then 2nd Class, then 3rd class in that order for those that survived, but the bulk of persons in all classes including crew had low rates of survival.
+
+```
+
+
+
